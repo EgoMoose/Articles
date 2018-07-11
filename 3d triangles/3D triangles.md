@@ -2,7 +2,7 @@ On occasion you may find it necessary to draw triangles given three points in 3D
 
 ## Triangle decomposition
 
-The first thing we need to be aware of is that Roblox does not have a singular default shape that can be used to create any triangle. However, a shape that Roblox does have is right-angle triangles, otherwise known as wedges. Thus, we can decompose any triangle into a maximum of two right-angle triangles and draw from there. We can easily draw this process by placing a perpendicular line on the longest edge and having it intersect with the opposite vertex.
+The first thing we need to be aware of is that Roblox does not have a singular default shape that can be used to create any 3D triangle. However, a shape that Roblox does have is right-angle triangles, otherwise known as wedges. Thus, we can decompose any triangle into a maximum of two right-angle triangles and draw from there. We can easily draw this process by placing a perpendicular line on the longest edge and having it intersect with the opposite vertex.
 
 ![img1](imgs/img1.png)
 
