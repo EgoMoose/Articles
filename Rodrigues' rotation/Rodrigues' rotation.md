@@ -1,5 +1,15 @@
 Having the ability to rotate vectors is a very useful tool to have in your repotoire. One of the easiest ways to do this is by using Rodrigues' rotation formula. In this article we are going to discuss how the formula is derived.
 
+## Table of Contents  
+
+* [Breaking up the formula](#breaking-up-the-formula)
+	* [Geometric proof](#geometric-proof)
+	* [Algebraic proof](#algebraic-proof)
+* [Rotating around a circle](#rotating-around-a-circle)
+* [Putting it all together](#putting-it-all-together)
+* [2D rotation matrix](#2d-rotation-matrix)
+* [Matrix form](#matrix-form)
+
 ## Breaking up the formula
 
 To start off let's look at what a Rodrigues' rotation actually looks like.
