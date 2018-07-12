@@ -97,6 +97,7 @@ In the previous section we had a equation that gave us a rotated vector. Occasio
 To start off we must realize that we need a way to represent the dot product and the cross product as matrix multiplications.
 
 ![eq8](imgs/eq8.png)
+
 ![eq9](imgs/eq9.png)
 
 Now we can plug these into the original equation and factor out the vector we want to rotate, `v`. We'll note that we get a clear distinction between the rotation matrix `R` and `v`.
