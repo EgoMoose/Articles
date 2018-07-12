@@ -22,7 +22,7 @@ We can use this identity to simplify the diagonal elements of the matrix. For ex
 
 ![eq3](imgs/conversion/eq3.png)
 
-We can also use this identity to simplify the product of two k components multiplying against `1 - cosθ`. For example, the second term of the `m12` component.
+We can also use this identity to simplify the product of two k components multiplying against `1 - cosθ`. For example, the second term of the `m21` component.
 
 ![eq6](imgs/conversion/eq6.png)
 
@@ -30,7 +30,7 @@ The second identity we will use is:
 
 ![eq4](imgs/conversion/eq4.png)
 
-We can use this identity for any single k-value multiplying against `sinθ`. For example, the first term in the `m12` component.
+We can use this identity for any single k-value multiplying against `sinθ`. For example, the first term in the `m21` component.
 
 ![eq5](imgs/conversion/eq5.png)
 
