@@ -65,6 +65,7 @@ As mentioned at the begining of the article, we use two right angle triangle ima
 What's most important to take away from these triangles is that because of the opposing slopes we cannot arbitarily use either image for the two right triangles we are trying to represent. The solution here is to use the 2d cross product (just the z-value). Using knowledge of the right hand rule we know the sign of the result will tell us the direction of the slope.
 
 ![img5](imgs/img5.png)
+
 *Note the sign of the cross product may be different than what you expect because in UDim2 positive y-values go down on screen, not up*
 
 We will use this value to find the corners that the image label should be placed at (where the top left corner should go). The triangle with the rightward descending slope will always have its corner on the vertex that is opposite to the longest edge. Meanwhile the leftward descending slope will have to be calculated.
