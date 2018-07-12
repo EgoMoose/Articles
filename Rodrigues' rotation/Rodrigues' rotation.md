@@ -1,3 +1,5 @@
+# Rodrigues' rotation
+
 Having the ability to rotate vectors is a very useful tool to have in your repotoire. One of the easiest ways to do this is by using Rodrigues' rotation formula. In this article we are going to discuss how the formula is derived.
 
 ## Table of Contents  
