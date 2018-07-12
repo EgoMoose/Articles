@@ -124,5 +124,21 @@ Again using the knowledge that `kx^2 + ky^2 + kz^2 = 1` we can simplify which le
 
 ![eq16](imgs/eq16.png)
 
+```Lua
+local function rodriguesMatrix(k, t)
+	-- we will use CFrame for this
+	local kx, ky, kz = k.x, k.y, k.z
+	local cos, sin = math.cos(t), math.sin(t);
+	return CFrame.new(0, 0, 0,
+		cos + (1-cos)*kx*kx, -sin*kz + (1-cos)*kx*ky, sin*ky + (1-cos)*kx*kz,
+		sin*kz + (1-cos)*ky*kx, cos + (1-cos)*ky*ky, -sin*kx + (1-cos)*ky*kz,
+		-sin*ky + (1-cos)*kz*kx, sin*kx + (1-cos)*kz*ky, cos + (1-cos)*kz*kz
+	);
+end
 
+-- now we can re-use the same rotation:
+local R = rodriguesMatrix(Vector3.new(0, 0, 1), math.pi/2); -- 90 degrees counter-clockwise around z-axis
+print(R * Vector3.new(1, 0, 0)); -- 0, 1, 0
+print(R * Vector3.new(0, 1, 0)); -- -1, 0, 0
+```
 
