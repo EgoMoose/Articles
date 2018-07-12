@@ -123,7 +123,6 @@ Now expand it:
 Again using the knowledge that `kx^2 + ky^2 + kz^2 = 1` we can simplify which leaves us with the final form of the matrix.
 
 ![eq16](imgs/eq16.png)
-<<<<<<< HEAD
 
 ```Lua
 local function rodriguesMatrix(k, t)
@@ -142,6 +141,3 @@ local R = rodriguesMatrix(Vector3.new(0, 0, 1), math.pi/2); -- 90 degrees counte
 print(R * Vector3.new(1, 0, 0)); -- 0, 1, 0
 print(R * Vector3.new(0, 1, 0)); -- -1, 0, 0
 ```
-
-=======
->>>>>>> c042123bfbed8a666ebfc426a77ea023b7d7560b
