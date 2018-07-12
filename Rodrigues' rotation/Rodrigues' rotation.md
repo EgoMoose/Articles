@@ -47,13 +47,13 @@ Since `cosθ` and `sinθ` can be thought of as x and y components on a unit circ
 
 Thus, to represent this new vector, `r'`, we can use the following equation:
 
-![eq6](imgs/img6.png)
+![eq6](imgs/eq6.png)
 
 ## Putting it all together
 
 Finally, to get the end result we must add the `r'` vector to the `d` vector to give us our rotated `v` vector.
 
-![eq7](imgs/img7.png)
+![eq7](imgs/eq7.png)
 
 This leaves us with the final equation and what you would find [on wikipedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula)!
 
@@ -71,15 +71,15 @@ There are a number of ways to find the 2D rotation matrix, but since we have alr
 
 To start we'll write the equation in the case where the `k` vector and the `v` vector are orthogonal. We'll also take the opportunity to put the cross product in matrix form:
 
-![eq17](imgs/img17.png)
+![eq17](imgs/eq17.png)
 
 In the 2D rotation case the axis of rotation, `k`, is the z-value pointing out of the screen `(0, 0, 1)` and `v` will always be laying on the x and y plane. Thus, we can plug in the `k` values into the cross product and simplify.
 
-![eq18](imgs/img18.png)
+![eq18](imgs/eq18.png)
 
 Finally, after a slight bit of expanding and rearranging we are left with the 2D rotation matrix:
 
-![eq19](imgs/img19.png)
+![eq19](imgs/eq19.png)
 
 ```Lua
 local function rotateV2(v, t)
@@ -96,33 +96,33 @@ In the previous section we had a equation that gave us a rotated vector. Occasio
 
 To start off we must realize that we need a way to represent the dot product and the cross product as matrix multiplications.
 
-![eq8](imgs/img8.png)
-![eq9](imgs/img9.png)
+![eq8](imgs/eq8.png)
+![eq9](imgs/eq9.png)
 
 Now we can plug these into the original equation and factor out the vector we want to rotate, `v`. We'll note that we get a clear distinction between the rotation matrix `R` and `v`.
 
-![eq10](imgs/img10.png)
+![eq10](imgs/eq10.png)
 
 Next we can show that:
 
-![eq11](imgs/img11.png)
-![eq12](imgs/img12.png)
+![eq11](imgs/eq11.png)
+![eq12](imgs/eq12.png)
 
 Remembering that since `k` is a unit vector it must be true that `kx^2 + ky^2 + kz^2 = 1` which can then be rearranged and used to simplify.
 
-![eq13](imgs/img13.png)
+![eq13](imgs/eq13.png)
 
 Using this revelation we can rewrite our `R` matrix.
 
-![eq14](imgs/img14.png)
+![eq14](imgs/eq14.png)
 
 Now expand it:
 
-![eq15](imgs/img15.png)
+![eq15](imgs/eq15.png)
 
 Again using the knowledge that `kx^2 + ky^2 + kz^2 = 1` we can simplify which leaves us with the final form of the matrix.
 
-![eq16](imgs/img16.png)
+![eq16](imgs/eq16.png)
 
 
 
