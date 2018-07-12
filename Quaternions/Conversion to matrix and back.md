@@ -14,7 +14,7 @@ First the quaternion values converted to Rodrigues' rotation values:
 
 Now using a couple [trigonometric identities](https://en.wikipedia.org/wiki/List_of_trigonometric_identities) we can plug in an simplify the rotation matrix.
 
-The first identity we will use is:
+**The first identity we will use is:**
 
 ![eq2](imgs/conversion/eq2.png)
 
@@ -26,7 +26,7 @@ We can also use this identity to simplify the product of two k components multip
 
 ![eq6](imgs/conversion/eq6.png)
 
-The second identity we will use is:
+**The second identity we will use is:**
 
 ![eq4](imgs/conversion/eq4.png)
 
