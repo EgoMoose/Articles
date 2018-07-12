@@ -123,6 +123,3 @@ Now expand it:
 Again using the knowledge that `kx^2 + ky^2 + kz^2 = 1` we can simplify which leaves us with the final form of the matrix.
 
 ![eq16](imgs/eq16.png)
-
-
-
