@@ -1,5 +1,11 @@
 On occasion you may find it necessary to draw triangles given three points in 2D space. This article aims to go over one method that can be used to create those triangles using knowledge of trigonometry and the 2D rotation matrix.
 
+## Table of Contents
+
+* [Triangle decomposition](#triangle-decomposition)
+* [Manipulating the rotation matrix](#manipulating-the-rotation-matrix)
+* [Putting it all together](#putting-it-all-together)
+
 ## Triangle decomposition
 
 The first thing we need to be aware of is that Roblox does not have a singular default shape that can be used to create any 2D triangle. However, using image labels we are able to upload right-angle triangles. Thus, we can decompose any triangle into a maximum of two right-angle triangles and draw from there. We can easily draw this process by placing a perpendicular line on the longest edge and having it intersect with the opposite vertex.
