@@ -3,8 +3,9 @@ On occasion you may find it necessary to draw triangles given three points in 2D
 ## Table of Contents
 
 * [Triangle decomposition](#triangle-decomposition)
-* [Manipulating the rotation matrix](#manipulating-the-rotation-matrix)
+* [Positioning the UI](#positioning-the-ui)
 * [Putting it all together](#putting-it-all-together)
+* [Positioning the UI Anchor points](#positioning-the-ui-anchor-points)
 
 ## Triangle decomposition
 
