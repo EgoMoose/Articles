@@ -123,7 +123,7 @@ We can also take note that since we plug in `k` and get an unscaled `k` returned
 
 ![eq17](imgs/conversion/eq17.png)
 
-Using the standard approach to find the eigenvectors can get a bit painful so we are going to use a bit of a cheat that we are only getting away with because a rotation matrix is orthonormal and thus it’s inverse is it’s transpose. <!-- link future article >
+Using the standard approach to find the eigenvectors can get a bit painful so we are going to use a bit of a cheat that we are only getting away with because a rotation matrix is orthonormal and thus it’s [inverse is it’s transpose](https://github.com/EgoMoose/Articles/blob/master/CFrames/CFrame%20inversion.md).
 
 ![eq18](imgs/conversion/eq18.png)
 
