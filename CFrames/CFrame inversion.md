@@ -8,6 +8,14 @@ Today I recieved the following message from a user:
 
 This user is correct! There is something going on with the CFrame class that is making his calculation not work that's no fault of his own. In this blog post blog post we'll explore why that is.
 
+
+## Table of contents
+
+* [Solving a system of equations with a matrix](#solving-a-system-of-equations-with-a-matrix)
+* [Why dont CFrames work](#why-dont-cframes-work)
+* [A quick note on position](#a-quick-note-on-position)
+* [Conclusion](#conclusion)
+
 ## Solving a system of equations with a matrix
 
 Before we get into the why, let's recreate what the user was having difficulties with so we're all on the same page.
