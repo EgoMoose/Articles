@@ -2,6 +2,13 @@ Sometimes it is useful to be able to convert a quaternion into a rotation matrix
 
 ## Table of Contents
 
+* [Quaternion to Matrix](#quaternion-to-matrix)
+* [Matrix to Quaternion](#matrix-to-quaternion)
+	* [Finding qw](#finding-qw)
+	* [Crash course in Eigenvalues and Eigenvectors](#crash-course-in-eigenvalues-and-eigenvectors)
+	* [Axis of rotation](#axis-of-rotation)
+	* [Degenerate cases](#degenerate-cases)
+
 ## Quaternion to Matrix
 
 This is easy enough given that we convert a quaternion to a Rodrigues' rotation and then plug those values into the matrix.
@@ -63,7 +70,7 @@ print(cf2);
 -- 0, 0, 0, 1, 0, 0, 0, 2.22044605e-16, -1, 0, 1, 2.22044605e-16
 ```
 
-## Matrix to quaternion
+## Matrix to Quaternion
 
 ### Finding qw
 
@@ -75,7 +82,9 @@ Since we're dealing with a unit quaternion we know that `qw^2 + qx^2 + qy^2 + qz
 
 ![eq10](imgs/conversion/eq10.png)
 
-Awesome we have solved for qw! In code form:
+Awesome we have solved for `qw`! 
+
+In code form:
 
 ```Lua
 local cf = CFrame.Angles(math.pi/2, math.pi/2, math.pi/2);
@@ -169,7 +178,7 @@ local trace = m11 + m22 + m33;
 local qw, qx, qy, qz;
 ```
 
-1. Use `qw`
+**1. Use `qw`**
 
 In this case we can be sure that our `qw` value will not be zero by checking the trace. If that's the case we can use the original solution.
 
@@ -180,7 +189,7 @@ qy = (m13-m31) / (4*qw);
 qz = (m21-m12) / (4*qw);
 ```
 
-2. Use `qx`
+**2. Use `qx`**
 
 We can make sure that `qx` is non-zero by ensuring that `m11` is greater than both `m22` and `m33`.
 
@@ -195,7 +204,7 @@ qz = (m31+m13) / (4*qx);
 qw = (m32-m23) / (4*qx);
 ```
 
-3. Use `qy`
+**3. Use `qy`**
 
 We can make sure that `qy` is non-zero by ensuring that `m22` is greater than `m33` (given the other 2 did not pass).
 
@@ -210,7 +219,7 @@ qz = (m32+m23) / (4*qy);
 qw = (m13-m31) / (4*qy);
 ```
 
-4. Use `qz`
+**4. Use `qz`**
 
 Assuming all the other cases didn't pass then we're left with `qz`.
 
