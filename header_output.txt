@@ -1,0 +1,5 @@
+
+	* [Triangle decomposition](#triangle-decomposition)
+	* [Positioning the UI](#positioning-the-ui)
+	* [Putting it all together](#putting-it-all-together)
+	* [Positioning the UI Anchor points](#positioning-the-ui-anchor-points)
