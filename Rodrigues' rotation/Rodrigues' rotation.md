@@ -9,8 +9,11 @@ Having the ability to rotate vectors is a very useful tool to have in your repot
 	* [Algebraic proof](#algebraic-proof)
 * [Rotating around a circle](#rotating-around-a-circle)
 * [Putting it all together](#putting-it-all-together)
-* [2D rotation matrix](#2d-rotation-matrix)
 * [Matrix form](#matrix-form)
+* [2D rotation matrix](#2d-rotation-matrix)
+* [Euler angle rotations](#euler-angle-rotations)
+	* [fromEulerAnglesXYZ](#fromEulerAnglesXYZ)
+	* [fromEulerAnglesYXZ](#fromEulerAnglesYXZ)
 
 ## Breaking up the formula
 
