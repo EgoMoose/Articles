@@ -77,31 +77,6 @@ local function rodriguesRotation(v, k, t)
 end
 ```
 
-## 2D rotation matrix
-
-There are a number of ways to find the 2D rotation matrix, but since we have already done all the math for the Rodrigues's rotation formula we may as well use it to find out how to rotate a 2D vector.
-
-To start we'll write the equation in the case where the `k` vector and the `v` vector are orthogonal. We'll also take the opportunity to put the cross product in matrix form:
-
-![eq17](imgs/eq17.png)
-
-In the 2D rotation case the axis of rotation, `k`, is the z-value pointing out of the screen `(0, 0, 1)` and `v` will always be laying on the x and y plane. Thus, we can plug in the `k` values into the cross product and simplify.
-
-![eq18](imgs/eq18.png)
-
-Finally, after a slight bit of expanding and rearranging we are left with the 2D rotation matrix:
-
-![eq19](imgs/eq19.png)
-
-```Lua
-local function rotateV2(v, t)
-	local cos, sin = math.cos(t), math.sin(t);
-	local x = v.x*cos - v.y*sin;
-	local y = v.x*sin + v.y*cos;
-	return Vector2.new(x, y);
-end
-```
-
 ## Matrix form
 
 In the previous section we had a equation that gave us a rotated vector. Occasionally we may find it useful to be able to preform this same rotation opperation, but with a matrix instead.
@@ -153,4 +128,75 @@ end
 local R = rodriguesMatrix(Vector3.new(0, 0, 1), math.pi/2); -- 90 degrees counter-clockwise around z-axis
 print(R * Vector3.new(1, 0, 0)); -- 0, 1, 0
 print(R * Vector3.new(0, 1, 0)); -- -1, 0, 0
+```
+
+## 2D rotation matrix
+
+There are a number of ways to find the 2D rotation matrix, but since we have already done all the math for the matrix form we may as well use it to find out how to rotate a 2D vector.
+
+We know that since we're only rotating x and y components the axis of rotation is `k = (0, 0, 1)`. If we plug that into the matrix and simplify we're left with the following matrix:
+
+![eq17](imgs/eq17.png)
+
+Of course all we need from this matrix to rotate a 2D vector is the square top left corner. This leaves us with our 2D rotation matrix.
+
+![eq18](imgs/eq18.png)
+
+```Lua
+local function rotateV2(v, t)
+	local cos, sin = math.cos(t), math.sin(t);
+	local x = v.x*cos - v.y*sin;
+	local y = v.x*sin + v.y*cos;
+	return Vector2.new(x, y);
+end
+```
+
+## Euler angle rotations
+
+We can also use the matrix form of a Rodrigues' rotation to find out how euler angle rotations work. In the same way that we focused on rotation around the z-axis in the 2D rotation matrix section we can also write out the matrices that represent the x and y axes as well.
+
+![eq19](imgs/eq19.png)
+
+### fromEulerAnglesXYZ
+
+Multiplying the above matrices as `Rx * Ry * Rz` we get a rotation matrix that represents a rotation applied in Z, Y, X order (this is due to vectors post multiplying).
+
+![eq20](imgs/eq20.png)
+
+This matrix is exactly what the `CFrame.fromEulerAnglesXYZ` and `CFrame.Angles` constructors use.
+
+```Lua
+local function fromEulerAnglesXYZ(rx, ry, rz)
+	local cx, sx = math.cos(rx), math.sin(rx);
+	local cy, sy = math.cos(ry), math.sin(ry);
+	local cz, sz = math.cos(rz), math.sin(rz);
+	
+	return CFrame.new(0, 0, 0,
+		cy*cz, -cy*sz, sy,
+		sx*sy*cz+cx*sz, -sx*sy*sz+cx*cz, -sx*cy,
+		-cx*sy*cz+sx*sz, cx*sy*sz+sx*cz, cx*cy
+	);
+end
+```
+
+### fromEulerAnglesYXZ
+
+Multiplying the above matrices as `Ry * Rx * Rz` we get a rotation matrix that represents a rotation applied in Z, X, Y order (this is due to vectors post multiplying).
+
+![eq21](imgs/eq21.png)
+
+This matrix is exactly what the `CFrame.fromEulerAnglesYXZ` and `CFrame.fromOrientation` constructors use.
+
+```Lua
+local function fromEulerAnglesYXZ(rx, ry, rz)
+	local cx, sx = math.cos(rx), math.sin(rx);
+	local cy, sy = math.cos(ry), math.sin(ry);
+	local cz, sz = math.cos(rz), math.sin(rz);
+	
+	return CFrame.new(0, 0, 0,
+		cy*cz+sy*sx*sz, -cy*sz+sy*sx*cz, sy*cx,
+		cx*sz, cx*cz, -sx,
+		-sy*cz+cy*sx*sz, sy*sz+cy*sx*cz, cy*cx
+	);
+end
 ```
