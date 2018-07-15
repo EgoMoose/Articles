@@ -12,8 +12,8 @@ Having the ability to rotate vectors is a very useful tool to have in your repot
 * [Matrix form](#matrix-form)
 * [2D rotation matrix](#2d-rotation-matrix)
 * [Euler angle rotations](#euler-angle-rotations)
-	* [fromEulerAnglesXYZ](#fromEulerAnglesXYZ)
-	* [fromEulerAnglesYXZ](#fromEulerAnglesYXZ)
+	* [fromEulerAnglesXYZ](#fromeuleranglesxyz)
+	* [fromEulerAnglesYXZ](#fromeuleranglesyxz)
 
 ## Breaking up the formula
 
