@@ -37,9 +37,37 @@ You'll note that this pattern also holds true for negative powers. Simply take n
 This pattern of `1, i, -1, -i` may feel familiar to you. If we treat the real number part of the pattern as being on the x-axis and the imaginiary parts as being on the y-axis then the pattern is essentially the same as `x , y, -x, -y` which is rotating 90 degrees counter-clockwise.
 
 ![img1]()
+
 ![img2]()
 
+Since these patterns share so much in common we can use a combination of imaginary and real numbers to represent numbers on a two dimensional grid. We call these complex numbers and we place them on the complex plane.
 
+![img3]()
 
+Interestingly, if we multiply a complex number by `i` we're left with a resulting complex number that has been rotated 90 degrees counter-clockwise.
 
+```
+(2 + i)
+(2 + i)*i = 2i + i^2 = -1 + 2i
+(2 + i)*i^2 = (-1 + 2i)*i = -i + 2i^2 = -2 - i
+(2 + i)*i^3 = (-2 - i)*i = -2i - i^2 = 1 - 2i
+(2 + i)*i^4 = (1 - 2i)*i = i - 2i^2 = 2 + i
+```
 
+![img4]()
+
+We can expand on this concept by instead multiplying with a complex number that gives us control of the angle we rotate by.
+
+We can trace a unit circle with `cosθ + sinθ*i` so if we multiply it by a complex number we get a general formula for rotating counter-clockwise by any angle.
+
+```
+(a + bi)*(cosθ + sinθ*i)
+a*cosθ + a*sinθ*i + b*cosθ*i + b*sinθ*i^2
+a*cosθ - b*sinθ + (a*sinθ + b*cosθ)i
+```
+
+You might be somewhat familiar with this formula. It's just the 2D rotation matrix in complex number form!
+
+## The quaternion is born
+
+Prior to quaternions most mathematicians saw the complex plane in 2D and simply figured if they wanted to add a third dimension they just had to add another imaginary number. However, this led to problems. 

@@ -167,70 +167,59 @@ local qz = (m21-m12) / (4*qw);
 
 The above code is great and all, but what happens if `qw` equals zero? Unfortunately, this leads to a nonsense result where our quaternion values are not representative of the matrix we derived them from.
 
-So how do we deal with this then? Well originally we calculated `qw` first and then used it to scale the rest of the quaternion values. If instead we use some variation of the trace to calculate one of the other components we can then use them to find the other quaternion values.
-
-That means there are four possible cases for any given CFrame.
-
-```Lua
-local cf = CFrame.Angles(math.pi/2, math.pi/2, math.pi/2);
-local x, y, z, m11, m12, m13, m21, m22, m23, m31, m32, m33 = cf:components();
-local trace = m11 + m22 + m33;
-local qw, qx, qy, qz;
-```
-
-**1. Use `qw`**
-
-In this case we can be sure that our `qw` value will not be zero by checking the trace. If that's the case we can use the original solution.
-
-```Lua
-qw = math.sqrt(1 + m11 + m22 + m33) * 0.5;
-qx = (m32-m23) / (4*qw);
-qy = (m13-m31) / (4*qw);
-qz = (m21-m12) / (4*qw);
-```
-
-**2. Use `qx`**
-
-We can make sure that `qx` is non-zero by ensuring that `m11` is greater than both `m22` and `m33`.
+So how do we deal with this then? Well originally we calculated `qw` first and then used it to scale the rest of the quaternion values. If instead we use some variation of the trace to calculate one of the other components we can instead use them to find the other quaternion values.
 
 ![eq25](imgs/conversion/eq25.png)
 
-![eq26](imgs/conversion/eq26.png)
+Of course if we are not careful we might end up picking an intial quaternion component that again leads us to a nonsense reslt (division by zero). To avoid this and pick a valid initial component we must use some intuition. We know we're dealing with a unit quaternion thus, `qw^2 + qx^2 + qy^2 + qz^2 = 1`. In order for that statement to be true the largest component can at minimum be `0.5`. Thus if we ensure that the initial component is at least `0.5` then we know we'll get a valid result for the rest of the components.
+
+This leaves us with a process we must check.
+
+**1. If `m11 + m22 + m33 > 0` then start with `qw`.**
 
 ```Lua
-qx = math.sqrt(1 + m11 - m22 - m33) * 0.5;
-qy = (m21+m12) / (4*qx);
-qz = (m31+m13) / (4*qx);
-qw = (m32-m23) / (4*qx);
+local qw = math.sqrt(1 + m11 + m22 + m33) * 0.5;
 ```
 
-**3. Use `qy`**
+We know that if `m11 + m22 + m33 > 0` then `qw` will be a value greater than `0.5` and anything else will be less than `0.5`.
 
-We can make sure that `qy` is non-zero by ensuring that `m22` is greater than `m33` (given the other 2 did not pass).
+**2. Otherwise if `m11 > m22` and `m11 > m33` then start with `qx`.**
 
-![eq28](imgs/conversion/eq28.png)
+```Lua
+local qx = math.sqrt(1 + m11 - m22 - m33) * 0.5;
+```
+
+Your first instinct like in the `qw` case might be to see if `m11 - m22 - m33` is greater than zero, but there's better way. If we compare the diagonals of our quaternion matrix we can see that `qx` is greater than `qy` and `qz` if `m11 > m22` and `m11 > m33`.
+
+![eq26](imgs/conversion/eq26.png)
+
+After adding some of the quaternion matrix components together and rearranging we can use `qx` to scale for the remaining values.
 
 ![eq27](imgs/conversion/eq27.png)
 
+**3. Otherwise if `m22 > m33` then start with `qy`.**
+
 ```Lua
-qy = math.sqrt(1 + m22 - m11 - m33) * 0.5;
-qx = (m21+m12) / (4*qy);
-qz = (m32+m23) / (4*qy);
-qw = (m13-m31) / (4*qy);
+local qy = math.sqrt(1 + m22 - m11 - m33) * 0.5;
 ```
 
-**4. Use `qz`**
-
-Assuming all the other cases didn't pass then we're left with `qz`.
+Using the same logic of comparing diagonals we know that if `qw` and `qx` are not the largest elements then if `m22 > m33` then `qy` is the largest since it's greater than `qz`.
 
 ![eq29](imgs/conversion/eq29.png)
 
+After adding some of the quaternion matrix components together and rearranging we can use `qy` to scale for the remaining values.
+
+![eq30](imgs/conversion/eq30.png)
+
+**4. Otherwise use `qz`.**
+
 ```Lua
 qz = math.sqrt(1 + m33 - m11 - m22) * 0.5;
-qx = (m31+m13) / (4*qz);
-qy = (m32+m23) / (4*qz);
-qw = (m21-m12) / (4*qz);
 ```
+
+Assuming all the other cases didn't pass then we're left with `qz` as the largest value and again we can use some quaternion matrix components to find out how to use it to scale for the other components.
+
+![eq31](imgs/conversion/eq31.png)
 
 **Putting it all together**
 
