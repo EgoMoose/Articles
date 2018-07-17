@@ -175,7 +175,7 @@ Of course if we are not careful we might end up picking an intial quaternion com
 
 This leaves us with a process we must check.
 
-1. **If `m11 + m22 + m33 > 0` then start with `qw`.**
+#### 1. If `m11 + m22 + m33 > 0` then start with `qw`.
 
 ```Lua
 local qw = math.sqrt(1 + m11 + m22 + m33) * 0.5;
@@ -183,7 +183,7 @@ local qw = math.sqrt(1 + m11 + m22 + m33) * 0.5;
 
 We know that if `m11 + m22 + m33 > 0` then `qw` will be a value greater than `0.5` and anything else will be less than `0.5`.
 
-2. **Otherwise if `m11 > m22` and `m11 > m33` then start with `qx`.**
+#### 2. Otherwise if `m11 > m22` and `m11 > m33` then start with `qx`.
 
 ```Lua
 local qx = math.sqrt(1 + m11 - m22 - m33) * 0.5;
@@ -197,7 +197,7 @@ After adding some of the quaternion matrix components together and rearranging w
 
 ![eq27](imgs/conversion/eq27.png)
 
-3. **Otherwise if `m22 > m33` then start with `qy`.**
+#### 3. Otherwise if `m22 > m33` then start with `qy`.
 
 ```Lua
 local qy = math.sqrt(1 + m22 - m11 - m33) * 0.5;
@@ -211,7 +211,7 @@ After adding some of the quaternion matrix components together and rearranging w
 
 ![eq30](imgs/conversion/eq30.png)
 
-4. **Otherwise use `qz`.**
+#### 4. Otherwise use `qz`.
 
 ```Lua
 qz = math.sqrt(1 + m33 - m11 - m22) * 0.5;
@@ -221,7 +221,7 @@ Assuming all the other cases didn't pass then we're left with `qz` as the larges
 
 ![eq31](imgs/conversion/eq31.png)
 
-**Putting it all together**
+#### Putting it all together.
 
 ```Lua
 local function matrixToQuaternion(cf)
