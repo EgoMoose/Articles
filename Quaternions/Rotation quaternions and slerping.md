@@ -61,9 +61,9 @@ We can expand on this concept by instead multiplying with a complex number that 
 We can trace a unit circle with `cosθ + sinθ*i` so if we multiply it by a complex number we get a general formula for rotating counter-clockwise by any angle.
 
 ```
-(a + bi)*(cosθ + sinθ*i)
-a*cosθ + a*sinθ*i + b*cosθ*i + b*sinθ*i^2
-a*cosθ - b*sinθ + (a*sinθ + b*cosθ)i
+(w + xi)*(cosθ + sinθ*i)
+= w*cosθ + w*sinθ*i + x*cosθ*i + x*sinθ*i^2
+= w*cosθ - x*sinθ + (w*sinθ + x*cosθ)i
 ```
 
 You might be somewhat familiar with this formula. It's just the 2D rotation matrix in complex number form!
@@ -73,9 +73,9 @@ You might be somewhat familiar with this formula. It's just the 2D rotation matr
 Prior to quaternions most people saw the complex plane in 2D and simply figured if they wanted to add a third dimension they just had to add another imaginary number, say `j^2 = -1`. Quickly however they found this didn't quite work due to multiplication requiring us to know the product of two imaginary numbers.
 
 ```
-(a1 + b1*i + c1*j)*(a2 + b2*i + c2*j) 
-= a1*a2 + a1*b2*i + a1*c2*j + b1*a2*i + b1*b2*i^2 + b1*c2*i*j + c1*a2*j + c1*b2*j*i + c1*c2*j^2
-= a1*a2 - b1*b2 - c1*c2 + (a1*b2 + b1*a2)*i + (a1*c2 + c1*a2)*j  + b1*c2*i*j + c1*b2*j*i
+(w1 + x1*i + y1*j)*(w2 + x2*i + y2*j) 
+= w1*w2 + w1*x2*i + w1*y2*j + x1*w2*i + x1*x2*i^2 + x1*y2*i*j + y1*w2*j + y1*x2*j*i + y1*y2*j^2
+= w1*w2 - x1*x2 - y1*y2 + (w1*x2 + x1*w2)*i + (w1*y2 + y1*w2)*j  + x1*y2*i*j + y1*x2*j*i
 ```
 
 *Note: i*j and j*i are not communative due to their imaginary nature.*
@@ -85,7 +85,7 @@ For quite sometime this problem didn't see much attention until an Irish matheme
 Famously the condition he wrote was:
 
 ```
-i^2 = j^2 = k^2 = i*j*k = 1
+i^2 = j^2 = k^2 = i*j*k = -1
 ```
 
 This may seem a bit confusing, but it we seperate this out (and again respect the non-commutativity) we get a few equalities we can use to expand.
@@ -98,3 +98,113 @@ j*i = -k	k*j = -i	i*k = -j
 
 In short Hamilton said that instead of stumping ourselves by not knowing a real number that is the resulting product of two imaginary numbers just set its product to another imaginary number and from there we can figure stuff out.
 
+## Quaternion operations
+
+The goal of this section is going to be to start to take some of the knowledge we have learned about quaternions and convert it to code.
+
+We have quaternions in the following form:
+
+```
+q = w + x*i + y*j + z*k
+```
+
+We can store that same information as an ordered pair by spliting up the real number part from the imagniary part. Thus the above becomes:
+
+```
+q = [w, x*i + y*j + z*k]
+```
+
+If we treat `i`, `j`, and `k` as seperate axes then we can store the second element of the ordered pair as a 3 dimensional vector.
+
+```
+v = (x, y, z)
+q = [w, v]
+```
+
+If we wanted to add or subtract two quaternions its quite straight forward. We just add/subtract each individual component.
+
+```
+q1 = [w1, v1]	q2 = [w2, v2]
+q1 + q2 = [w1 + w2, v1 + v2]
+q1 - q2 = [w1 - w2, v1 - v2]
+```
+
+Multiplication is not quite as simple as addition and subtraction. We can figure out how to do this calculation by applying the equalities hamilton's equation.
+
+```
+q1 = w1 + x1*i + y1*j + z1*k	q2 = w2 + x2*i + y2*j + z2*k
+
+q1 * q2 = (w1 + x1*i + y1*j + z1*k)*(w2 + x2*i + y2*j + z2*k)
+		= w1*w2 + w1*(x2*i + y2*j + z2*k) + x1*w2*i + x1*x2*i^2 + x1*y2*i*j + x1*z2*i*k + y1*w2*j + y1*x2*j*i + y1*y2*j^2 + y1*z2*j*k + z1*w2*k + z1*x2*k*i + z1*y2*k*j + z1*z2*k^2
+	    = w1*w2 - x1*x2 - y1*y2 - z1*z2 + w1*(x2*i + y2*j + z2*k) + w2*(x1*i + y1*j + z1*k) + x1*y2*k - x1*z2*j - y1*x2*k + y1*z2*i + z1*x2*j - z1*y2*i
+```
+
+We can then convert this back to the ordered pair form:
+
+```
+q1 = [w1, v1]	q2 = [w2, v2]
+
+q1 * q2 = [w1*w2 - (v1 . v2), w1*v2 + w2*v1 + (v1 x v2)]
+```
+
+We can use this form of the equation to find the inverse of a quaternion pretty easily. We need to know one more thing, rotation quaternions are unit quaternions meaning their magnitudes equal `1`. We'll explain why this is when we start talking about intuition, but for now:
+
+```
+q = w + x*i + y*j + z*k
+
+w^2 + x^2 + y^2 + z^2 = 1
+```
+
+Knowing that information the inverse is pretty straightforward to calculate. If we treat `[1, (0, 0, 0)]` as the identity quaternion then all we need to do to invert is flip the `x`, `y`, and `z` components:
+
+```
+q = [w, v]	q^-1 = [w, -v]
+
+q * q^-1 = [w*w + (v . v), w*v - w*v + (v x v)]
+		 = [1, (0, 0, 0)]
+```
+
+In code form:
+
+```Lua
+local quaternion = {}
+local quaternion_mt = {__index = quaternion};
+
+function quaternion_mt.__mul(q0, q1)
+	local w0, w1 = q0.w, q1.w;
+	local v0, v1 = Vector3.new(q0.x, q0.y, q0.z), Vector3.new(q1.x, q1.y, q1.z)
+	local nw = w0*w1 - v0:Dot(v1);
+	local nv = v0*w1 + v1*w0 + v0:Cross(v1);
+	return quaternion.new(nw, nv.x, nv.y, nv.z);
+end
+
+function quaternion_mt.__tostring(q)
+	-- print as floats, be aware a more precise number is actually stored
+	return string.format("%f, %f, %f, %f", q.w, q.x, q.y, q.z);
+end
+
+function quaternion.new(w, x, y, z)
+	local self = {};
+	
+	self.w = w;
+	self.x = x;
+	self.y = y;
+	self.z = z;
+	
+	return setmetatable(self, quaternion_mt);
+end
+
+function quaternion:inverse()
+	return quaternion.new(self.w, -self.x, -self.y, -self.z);
+end
+
+-- examples:
+
+local q1 = quaternion.new(0.5, 0.5, 0.5, 0.5);
+local q2 = quaternion.new(1/math.sqrt(2), 1/math.sqrt(2), 0, 0);
+
+print(q1 * q2);			  -- 0.000000, 0.707107, 0.707107, 0.000000
+print(q1 * q1:inverse()); -- 1.000000, 0.000000, 0.000000, 0.000000
+print(q1:inverse() * q1); -- 1.000000, 0.000000, 0.000000, 0.000000
+print(q2 * q2:inverse()); -- 1.000000, 0.000000, 0.000000, 0.000000
+```
