@@ -135,8 +135,8 @@ Multiplication is not quite as simple as addition and subtraction. We can figure
 q1 = w1 + x1*i + y1*j + z1*k	q2 = w2 + x2*i + y2*j + z2*k
 
 q1 * q2 = (w1 + x1*i + y1*j + z1*k)*(w2 + x2*i + y2*j + z2*k)
-		= w1*w2 + w1*(x2*i + y2*j + z2*k) + x1*w2*i + x1*x2*i^2 + x1*y2*i*j + x1*z2*i*k + y1*w2*j + y1*x2*j*i + y1*y2*j^2 + y1*z2*j*k + z1*w2*k + z1*x2*k*i + z1*y2*k*j + z1*z2*k^2
-	    = w1*w2 - x1*x2 - y1*y2 - z1*z2 + w1*(x2*i + y2*j + z2*k) + w2*(x1*i + y1*j + z1*k) + x1*y2*k - x1*z2*j - y1*x2*k + y1*z2*i + z1*x2*j - z1*y2*i
+        = w1*w2 + w1*(x2*i + y2*j + z2*k) + x1*w2*i + x1*x2*i^2 + x1*y2*i*j + x1*z2*i*k + y1*w2*j + y1*x2*j*i + y1*y2*j^2 + y1*z2*j*k + z1*w2*k + z1*x2*k*i + z1*y2*k*j + z1*z2*k^2
+        = w1*w2 - x1*x2 - y1*y2 - z1*z2 + w1*(x2*i + y2*j + z2*k) + w2*(x1*i + y1*j + z1*k) + x1*y2*k - x1*z2*j - y1*x2*k + y1*z2*i + z1*x2*j - z1*y2*i
 ```
 
 We can then convert this back to the ordered pair form:
@@ -161,7 +161,7 @@ Knowing that information the inverse is pretty straightforward to calculate. If 
 q = [w, v]	q^-1 = [w, -v]
 
 q * q^-1 = [w*w + (v . v), w*v - w*v + (v x v)]
-		 = [1, (0, 0, 0)]
+         = [1, (0, 0, 0)]
 ```
 
 In code form:
@@ -203,7 +203,7 @@ end
 local q1 = quaternion.new(0.5, 0.5, 0.5, 0.5);
 local q2 = quaternion.new(1/math.sqrt(2), 1/math.sqrt(2), 0, 0);
 
-print(q1 * q2);			  -- 0.000000, 0.707107, 0.707107, 0.000000
+print(q1 * q2);           -- 0.000000, 0.707107, 0.707107, 0.000000
 print(q1 * q1:inverse()); -- 1.000000, 0.000000, 0.000000, 0.000000
 print(q1:inverse() * q1); -- 1.000000, 0.000000, 0.000000, 0.000000
 print(q2 * q2:inverse()); -- 1.000000, 0.000000, 0.000000, 0.000000
