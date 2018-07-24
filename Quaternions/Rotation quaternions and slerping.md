@@ -2,6 +2,20 @@
 
 This article aims to cover the technical aspects of rotation quaternions (i.e. how to write a quaternion class). Readers are recommended to have read the [Rodrigues' rotation](https://github.com/EgoMoose/Articles/blob/master/Rodrigues'%20rotation/Rodrigues'%20rotation.md) article ahead of time as it will be used to compare results.
 
+## Table of Contents
+
+* [Crash course on imaginiarycomplex numbers](#crash-course-on-imaginiarycomplex-numbers)
+* [The quaternion is born](#the-quaternion-is-born)
+* [Quaternion operations](#quaternion-operations)
+* [Rotation Quaternion intuition](#rotation-quaternion-intuition)
+	* [Single axis rotations](#single-axis-rotations)
+	* [Two axis rotations](#two-axis-rotations)
+	* [All axes rotation](#all-axes-rotation)
+	* [Intuition recap](#intuition-recap)
+* [SLERPing](#slerping)
+	* [Conversion to Rodrigues rotation](#conversion-to-rodrigues-rotation)
+	* [SLERP](#slerp)
+
 ## Crash course on imaginiary/complex numbers
 
 Before we can get into understanding quaternions we first need to understand the concept of imaginary and complex numbers. The names might seem daunting, but for our purposes the concepts are pretty straight forward. 
