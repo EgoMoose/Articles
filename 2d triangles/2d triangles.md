@@ -55,6 +55,8 @@ The last thing we need to answer before we start to talk about how to actually p
 
 ![img4](imgs/img4.gif)
 
+I think it's worth noting that the above gif implies the vector that splits the triangle is negative. This would not actually be true in our case though unless the triangle was upside down since UDim2 has increasing y-values as you travel down the screen.
+
 ```Lua
 local function draw2dTriangle(a, b, c, parent)
 	-- code from before...
@@ -90,7 +92,7 @@ end
 
 The last thing we need is to adjust the corner positions we just calculated. We have the real position, but Roblox (regardless of rotation) will always place GUI elements as if they aren’t rotated. Since this is the case we have to essentially “de-rotate” our corners and use those.
 
-Since shapes rotate from the center we must first take the corners relative to their centers, then we can use a 2D [rotation matrix](https://en.wikipedia.org/wiki/Rotation_matrix) to rotate the corners.
+Since shapes rotate from the center we must first take the corners relative to their centers, then we can use a [2D rotation matrix](https://github.com/EgoMoose/Articles/blob/master/Rodrigues'%20rotation/Rodrigues'%20rotation.md#2d-rotation-matrix) to rotate the corners.
 
 ```Lua
 local function rotateV2(v, t)
