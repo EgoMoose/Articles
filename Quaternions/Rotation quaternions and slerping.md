@@ -4,7 +4,7 @@ This article aims to cover the technical aspects of rotation quaternions (i.e. h
 
 ## Table of Contents
 
-* [Crash course on imaginiarycomplex numbers](#crash-course-on-imaginiarycomplex-numbers)
+* [Crash course on imaginiary/complex numbers](#crash-course-on-imaginiarycomplex-numbers)
 * [The quaternion is born](#the-quaternion-is-born)
 * [Quaternion operations](#quaternion-operations)
 * [Rotation Quaternion intuition](#rotation-quaternion-intuition)
