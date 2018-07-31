@@ -167,8 +167,8 @@ We can use this form of the equation to find the inverse of a quaternion pretty 
 q = [w, v]	q^-1 = [w, -v]
 
 q * q^-1 = [w*w + (v . v), w*v - w*v + (v x v)]
-		 = [w*w + (v . v), (0, 0, 0)]
-		 = [???, (0, 0, 0)]
+         = [w*w + (v . v), (0, 0, 0)]
+         = [???, (0, 0, 0)]
 ```
 
 That takes care of the `x`, `y`, and `z` components of our ordered pair, but as mentioned before we need `w` to equal `1`. Luckily, this turns out to be one extra operation from the above, just divide by `w*w + (v . v)`, which we call the conjugate. 
@@ -179,8 +179,8 @@ Thus, the true inverse of a quaternion is:
 q = [w, v]	q^-1 = [w, -v] / (w*w + (v . v))
 
 q * q^-1 = [w*w + (v . v), w*v - w*v + (v x v)] / (w*w + (v . v))
-		 = [w*w + (v . v), (0, 0, 0)] / (w*w + (v . v))
-		 = [1, (0, 0, 0)]
+         = [w*w + (v . v), (0, 0, 0)] / (w*w + (v . v))
+         = [1, (0, 0, 0)]
 ```
 
 So taking everything we have learned we can put this in code form:
