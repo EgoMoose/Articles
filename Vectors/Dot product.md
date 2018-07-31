@@ -85,7 +85,7 @@ Thus if we plug this in we're left with:
 In code this would be:
 
 ```Lua
-function dot2d(u, v)
+function dot3d(u, v)
 	return u.x*v.x + u.y*v.y + u.z*v.z;
 end
 ```
