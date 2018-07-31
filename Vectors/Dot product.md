@@ -18,27 +18,27 @@ To start off let’s have a definition for the dot product given vectors U and V
 
 This definition may of course leave you wondering what a scalar projection is, and more importantly how to calculate it. A scalar projection is the amount that one vector travels in another vector’s direction. So if we say that we want the projection of U onto V we want to know how much of vector U is going in the same direction as vector V and vice versa for the projection of V onto U.
 
-![gif1](imgs/gif1.gif)
+![gif1](imgs/dot/gif1.gif)
 
 To calculate the projection we use the trigonometric functions alongside right triangles to solve for the adjacent edge.
 
-![eq1](imgs/eq1.png)
+![eq1](imgs/dot/eq1.png)
 
-![img1](imgs/img1.png)
+![img1](imgs/dot/img1.png)
 
 *Note that θ is the angle between vectors.*
 
 To finish the dot product calculation we take the magnitude of the vector we’re projecting onto and multiply it by the projection. With that in mind we can start to define an equation for the dot product:
 
-![eq2](imgs/eq2.png)
+![eq2](imgs/dot/eq2.png)
 
 If we were to follow the same process and multiply the projection of u onto v by the magnitude of v we will find we get the same result.
 
-![eq3](imgs/eq3.png)
+![eq3](imgs/dot/eq3.png)
 
 Thus, the dot product is communative meaning:
 
-![eq4](imgs/eq4.png)
+![eq4](imgs/dot/eq4.png)
 
 Using our geometric definition of the dot product we could write it in code as such.
 
@@ -50,7 +50,7 @@ end
 
 Before we move on, there are a few important things we can take away from this definition. After some simple rearranging we can find either of the projections and the angle between the two vectors.
 
-![eq5](imgs/eq5.png)
+![eq5](imgs/dot/eq5.png)
 
 Take note that the projections are scalars and can be negative. In order to convert these projections into vectors one would have to multiply them by the unit vector of what it's being projected onto.
 
@@ -58,29 +58,29 @@ Take note that the projections are scalars and can be negative. In order to conv
 
 In the previous section we defined both an equation and a geometric definition for the dot product. The main issue with this is that the geometric equation for the dot product requires us to know the angle between two vectors for us to be able to compute it. Lucky for us there is another way to calculate the dot product. To figure out what that is let’s review the law of cosines.
 
-![eq6](imgs/eq6.png)
+![eq6](imgs/dot/eq6.png)
 
-![img2](imgs/img2.png)
+![img2](imgs/dot/img2.png)
 
 We can apply this same formula to a triangle created by two vectors.
 
-![eq7](imgs/eq7.png)
+![eq7](imgs/dot/eq7.png)
 
-![img3](imgs/img3.png)
+![img3](imgs/dot/img3.png)
 
 We can sub in the dot product for the final term and rearrange.
 
-![eq8](imgs/eq8.png)
+![eq8](imgs/dot/eq8.png)
 
 We know that the magnitude of a vector comes from the Pythagorean Theorem thus we know that the magnitude of a vector squared is equal to the sum of its components squared.
 
 *Where i represents the components of the vector.*
 
-![eq9](imgs/eq9.png)
+![eq9](imgs/dot/eq9.png)
 
 Thus if we plug this in we're left with:
 
-![eq10](imgs/eq10.png)
+![eq10](imgs/dot/eq10.png)
 
 In code this would be:
 
@@ -109,19 +109,19 @@ Getting the first part is simple enough, but how do we get the surface normal? F
 
 So, let’s take a look at the situation. In the image below we have the vector we want to reflect (initial laser) and the surface normal. Our goal is to calculate the reflected laser’s direction.
 
-![img4](imgs/img4.png)
+![img4](imgs/dot/img4.png)
 
 The first thing to take note of is that as we have it drawn above the vectors aren’t drawn with their tails attached to the origin which is how your computer views them. To fix that let’s redraw the above image so we can get a better visualization of our vectors (at least in a mathematical sense). We’ll also draw our reflected laser as a dotted line to signify that we don’t actually know its value, rather it’s something we’re trying to solve for.
 
-![img5](imgs/img5.png)
+![img5](imgs/dot/img5.png)
 
 The next step we’ll take is to get the opposite vector to the initial laser and then find its scalar projection on the surface normal.
 
-![img6](imgs/img6.png)
+![img6](imgs/dot/img6.png)
 
 Finally, if we double that scalar projection and convert it into a vector projection we'll get a vector that's the same length and direction as the dotted blue line in the below image. If we add the initial laser to that dotted blue line you'll note we're offset to the resulting reflected laser!
 
-![img7](imgs/img7.png)
+![img7](imgs/dot/img7.png)
 
 Thus, our reflection function is:
 
@@ -133,7 +133,7 @@ end
 
 With that being said, this is not a lesson on creating player items/tools. There are other resources for that. As such here is a quick example of a reflecting laser gun.
 
-![gif2](imgs/gif2.gif)
+![gif2](imgs/dot/gif2.gif)
 
 ```Lua
 local tool = script.Parent;
