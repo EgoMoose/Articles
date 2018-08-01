@@ -88,7 +88,7 @@ end
 function mt.__div(a, b)
 	if (not not ref[a] and not not ref[b]) then
 		local a, b = ref[a], ref[b];
-		return vector3.new(a.x / b.x, a.y / b.y);
+		return vector2.new(a.x / b.x, a.y / b.y);
 	elseif (not not ref[a] and typeof(b) == "number") then
 		local a = ref[a];
 		return vector2.new(a.x / b, a.y / b);
