@@ -1,3 +1,4 @@
+local abs = math.abs;
 local sqrt = math.sqrt;
 
 local rep = string.rep;
@@ -169,8 +170,8 @@ end
 function vector3:isClose(b, epsilon)
 	-- i'm unsure of this method since it's not well explained/documented
 	local epsilon = epsilon or 0;
-	local d = b - self;
-	return d.magnitude <= epsilon;
+	local a, b = ref[self], ref[b];
+	return abs(a.x - b.x) <= epsilon and abs(a.y - b.y) <= epsilon and abs(a.z - b.z) <= epsilon;
 end
 
 -- return class
