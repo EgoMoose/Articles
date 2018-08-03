@@ -180,6 +180,14 @@ local function fromEulerAnglesXYZ(rx, ry, rz)
 		-cx*sy*cz+sx*sz, cx*sy*sz+sx*cz, cx*cy
 	);
 end
+
+local function toEulerAnglesXYZ(cf)
+	local x, y, z, m11, m12, m13, m21, m22, m23, m31, m32, m33 = cf:components();
+	local rx = math.atan2(-m23, m33)
+	local ry = math.asin(m13);
+	local rz = math.atan2(-m12, m11);
+	return rx, ry, rz;
+end
 ```
 
 ### fromEulerAnglesYXZ
@@ -201,5 +209,13 @@ local function fromEulerAnglesYXZ(rx, ry, rz)
 		cx*sz, cx*cz, -sx,
 		-sy*cz+cy*sx*sz, sy*sz+cy*sx*cz, cy*cx
 	);
+end
+
+local function toEulerAnglesYXZ(cf)
+	local x, y, z, m11, m12, m13, m21, m22, m23, m31, m32, m33 = cf:components();
+	local rx = math.asin(-m23)
+	local ry = math.atan2(m13, m33)
+	local rz = math.atan2(m21, m22);
+	return rx, ry, rz;
 end
 ```
