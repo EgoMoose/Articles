@@ -23,7 +23,7 @@ FPSs can get messy. Our goal of course is to keep things as straightforward as p
 
 ## Client
 
-The only thing I'm going into this with is a simple weapon I had a friend make me. You should take note of a few small invisible parts that I've put in the model. The part `Handle` will be used to offset the weapon from our view and the parts `Right` and `Left` will be used to mark hand placement later.
+The only thing I'm going into this with is a simple weapon I had a friend make me. You should take note of a few small invisible parts that I've put in the model. The part `Handle` will be used to offset the weapon from our view and the parts `Right` and `Left` will be used to mark hand placement later. These parts all have their front face facing forward and their up face facing up. This helps ensure later on that we won’t have our weapon rotated in some odd way.
 
 ![img1](imgs/simpleFPS/img1.png)
 
@@ -79,9 +79,11 @@ joint.Parent = viewModel.Head;
 
 ### Aiming down sights
 
-To get our weapon to aim down the sights we will add a small invisible part to our weapon called `Aim`. We will use this part as a reference to where the weapon should be attached to the head when the player is aiming. Since we adjusted the `C0` value earlier we will make this adjustment in it's entirety with `C1` to avoid overlap.
+To get our weapon to aim down the sights we will add a small invisible part to our weapon called `Aim`. We will use this part as a reference to where the weapon should be attached to the head when the player is aiming. Again, we’ll make sure the front face is facing forward and the up face is facing up.
 
 ![img3](imgs/simpleFPS/img3.png)
+
+Since we adjusted the `C0` value earlier we will make this adjustment in it's entirety with `C1` to avoid overlap.
 
 To start we use the basic equality of joints we can figure out how to pick `C1` given that `weapon.Handle = joint.Part1` and we're setting `joint.Part1.CFrame = camera.CFrame`.
 
