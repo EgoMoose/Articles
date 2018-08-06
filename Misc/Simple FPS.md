@@ -39,7 +39,7 @@ I created the viewmodel by adjusting the scale properties of my character for sk
 
 Now that we have our view model we need to attach it to the camera. This is relatively simple because in first person the head and camera have the same CFrame. Thus, all we need to do is write an update loop that places our view model's head right where the camera is. We'll also be sure to remove the view model when the player dies.
 
-~~~~~~~~~~~~~~~~~
+```Lua
 local camera = game.Workspace.CurrentCamera;
 local humanoid = game.Players.LocalPlayer.CharacterAdded:Wait():WaitForChild("Humanoid");
 
@@ -55,13 +55,13 @@ end
 
 humanoid.Died:Connect(onDied);
 game:GetService("RunService").RenderStepped:Connect(onUpdate);
-~~~~~~~~~~~~~~~~~
+```
 
 ### Attaching the weapon to the view model
 
 We can also take this opportunity to use a joint to attach the weapon to the viewl model's head which will ensure it stays relative to the camera as we rotate. You will have to play around with the `C0` value to properly offset the weapon. You will likely have to do this for every unique weapon you use due to varying sizes and what looks best in relation to your camera.
 
-~~~~~~~~~~~~~~~~~
+```Lua
 local repWeapon = game.ReplicatedStorage:WaitForChild("M249");
 local weapon = repWeapon:Clone();
 
@@ -73,7 +73,7 @@ joint.C0 = CFrame.new(1, -1.5, -2); -- what I found fit best
 joint.Part0 = viewModel.Head;
 joint.Part1 = weapon.Handle;
 joint.Parent = viewModel.Head;
-~~~~~~~~~~~~~~~~~
+```
 
 ![gif1](imgs/simpleFPS/gif1.gif)
 
@@ -85,23 +85,23 @@ To get our weapon to aim down the sights we will add a small invisible part to o
 
 To start we use the basic equality of joints we can figure out how to pick `C1` given that `weapon.Handle = joint.Part1` and we're setting `joint.Part1.CFrame = camera.CFrame`.
 
-~~~~~~~~~~~~~~~~~
+```
 joint.Part0.CFrame * joint.C0 == joint.Part1.CFrame * joint.C1
 joint.C1 = joint.Part1.CFrame:inverse() * joint.Part0.CFrame * joint.C0
 -- recall though that joint.Part0.CFrame == camera.CFrame, thus:
 joint.C1 = joint.C0
-~~~~~~~~~~~~~~~~~
+```
 
 Of course we want to further adjust this so the camera focuses on the `Aim` part, not `Handle`. So using inverses we can find the offset that would be needed to move from the `Handle.CFrame` to the `Aim.CFrame`.
 
-~~~~~~~~~~~~~~~~~
+```
 Handle.CFrame * offset = Aim.CFrame
 offset = Handle.CFrame:inverse() * Aim.CFrame;
-~~~~~~~~~~~~~~~~~
+```
 
 Putting this all together we get:
 
-~~~~~~~~~~~~~~~~~
+```Lua
 local aimCount = 0;
 local offset = weapon.Handle.CFrame:inverse() * weapon.Aim.CFrame;
 
@@ -134,7 +134,7 @@ end
 
 game:GetService("UserInputService").InputBegan:Connect(onInputBegan);
 game:GetService("UserInputService").InputEnded:Connect(onInputEnded);
-~~~~~~~~~~~~~~~~~
+```
 
 ![gif2](imgs/simpleFPS/gif2.gif)
 
@@ -142,7 +142,7 @@ game:GetService("UserInputService").InputEnded:Connect(onInputEnded);
 
 Now that we have the weapon in place we need to attach the arms to it by using the shoulder and elbow joints. We could manually figure out these values, but to keep things interesting and hassle free for other weapons we will use the `Right` and `Left` parts to calculate a `C1` for our shoulder joints.
 
-~~~~~~~~~~~~~~~~~
+```Lua
 local function updateArm(key)
 	-- get shoulder we are rotating
 	local shoulder = viewModel[key.."UpperArm"][key.."Shoulder"];
@@ -158,7 +158,7 @@ local function onUpdate(dt)
 	updateArm("Right");
 	updateArm("Left");
 end
-~~~~~~~~~~~~~~~~~
+```
 
 ![gif3](imgs/simpleFPS/gif3.gif)
 
@@ -176,7 +176,7 @@ Here's where one of those tricks I talked about earlier is going to come into pl
 
 The first thing we will want to replicate is the player looking up and down. We'll do this by finding out the vertical angle the player's looking at, sending it to the server, and having the server rotate the `waist` and `neck` joints by half the angle to spread out the rotation.
 
-~~~~~~~~~~~~~~~~~
+```Lua
 -- in server script
 local remoteEvents = game.ReplicatedStorage:WaitForChild("RemoteEvents");
 
@@ -200,7 +200,7 @@ local function onUpdate(dt)
 	updateArm("Left");
 	remoteEvents.tiltAt:FireServer(math.asin(camera.CFrame.LookVector.y));
 end
-~~~~~~~~~~~~~~~~~
+```
 
 ![gif4](imgs/simpleFPS/gif4.gif)
 
@@ -208,7 +208,7 @@ That's looking a bit better!
 
 In order to get the character to hold the weapon we'll use a `Motor6D` to connect the `Handle` to the `RightHand`.
 
-~~~~~~~~~~~~~~~~~
+```Lua
 -- in server script
 remoteEvents.setup.OnServerEvent:Connect(function(player, weapon)
 	local weapon = weapon:Clone();
@@ -221,7 +221,7 @@ end)
 
 -- back in the client script
 remoteEvents.setup:FireServer(repWeapon);
-~~~~~~~~~~~~~~~~~
+```
 
 This will allow us to create an animation for when the player is just holding the weapon, and an animation when they player is aiming the weapon.
 
@@ -229,7 +229,7 @@ This will allow us to create an animation for when the player is just holding th
 
 Using animations for this purpose is nice for two reasons. The first is that animations will automatically replicate, thus we don't need to worry about a `RemoteEvent`. The second is that by default animations will interpolate between each other which means we don't have to worry about smooth transitions.
 
-~~~~~~~~~~~~~~~~~
+```Lua
 -- client
 wait();
 local holdAnim = humanoid:LoadAnimation(repWeapon.HoldAnim);
@@ -253,13 +253,13 @@ local function aimDownSights(aiming)
 		joint.C1 = start:Lerp(goal, t/100);
 	end
 end
-~~~~~~~~~~~~~~~~~
+```
 
 The one downside to animations is that Roblox doesn't like users sharing them. As a result you'll notice that if you load up the place I linked at the end of the post that the animations won't load. As a result if you are going to use my exact animations then I've saved them in a dummy for use with the animation editor. You'll have to load them in and export them to your own profile. If you do that remember to change the animation IDs.
 
 The last thing we need to do is tilt the arms. Earlier we only applied the half the vertical tilt to the upper torso which is carried over to the arms, but we want the full rotation in the arms. This is easy enough to add if we just adust the `tiltAt` remove event.
 
-~~~~~~~~~~~~~~~~~
+```Lua
 local neckC0 = CFrame.new(0, 0.8, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1);
 local waistC0 = CFrame.new(0, 0.2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1);
 local rShoulderC0 = CFrame.new(1, 0.5, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1);
@@ -276,7 +276,7 @@ remoteEvents.tiltAt.OnServerEvent:Connect(function(player, theta)
 	rShoulder.C0 = rShoulderC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
 	lShoulder.C0 = lShoulderC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
 end)
-~~~~~~~~~~~~~~~~~
+```
 
 ![gif5](imgs/simpleFPS/gif5.gif)
 
