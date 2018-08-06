@@ -1,3 +1,5 @@
+# 2D Triangles
+
 On occasion you may find it necessary to draw triangles given three points in 2D space. This article aims to go over one method that can be used to create those triangles using knowledge of trigonometry and the 2D rotation matrix.
 
 ## Table of Contents

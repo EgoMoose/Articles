@@ -1,3 +1,5 @@
+# 3D Triangles
+
 On occasion you may find it necessary to draw triangles given three points in 3D space. This article aims to go over one method that can be used to create those triangles using knowledge of trigonometry and coordinate frames.
 
 ## Table of contents
