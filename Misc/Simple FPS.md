@@ -295,7 +295,7 @@ The trick to solving this problem is to use something on the server to constantl
 
 There are two objects that are built into Roblox that will do this job for us. 
 
-One is a `motor6D` where we can set the `Desired` when we fire the remote event and then use the `CurrentAngle` to actually update.
+One is a `motor6D` where we can set the `DesiredAngle` when we fire the remote event and then use the `CurrentAngle` to actually update.
 
 ```Lua
 -- server
