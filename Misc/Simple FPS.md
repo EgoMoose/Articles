@@ -15,6 +15,7 @@ In this post we will be talking about creating our very own filtering enabled fr
 	* [Arm placement](#arm-placement)
 * [Server](#server)
 	* [Replicating weapon movement](#replicating-weapon-movement)
+* [Edit: A slight ammendment](#edit-a-slight-ammendment)
 * [Conclusion](#conclusion)
 
 ## Things to take note of
@@ -281,6 +282,116 @@ end)
 ```
 
 ![gif5](imgs/simpleFPS/gif5.gif)
+
+## Edit: A slight ammendment
+
+I had a user leave the following comment on the scripting helpers blog post:
+
+>Wouldn't sending server updates every render step end up using a decent amount of traffic (on the server and on the client) esp. on big servers?
+
+This is correct and was an oversight on my part when writing this post so i'll quickly cover that now in this section.
+
+The trick to solving this problem is to use something on the server to constantly interpolate some target angle. This way we can send an updated angle every say 1/10th of a second and have the character smoothly look up and down as opposed to suddenly tilting when the server remote event is fired. 
+
+There are two objects that are built into Roblox that will do this job for us. 
+
+One is a `motor6D` where we can set the `Desired` when we fire the remote event and then use the `CurrentAngle` to actually update.
+
+```Lua
+-- server
+remoteEvents.tiltAt.OnServerEvent:Connect(function(player, theta)	
+	local tJoint = player.Character.Head:FindFirstChild("tiltJoint");
+	if (tJoint) then
+		tJoint.DesiredAngle = theta;
+	end
+end)
+
+remoteEvents.setup.OnServerEvent:Connect(function(player, weapon)
+	-- stuff from before...
+	local tiltPart = Instance.new("Part");
+	tiltPart.Size = Vector3.new(.1, .1, .1);
+	tiltPart.Transparency = 1;
+	tiltPart.CanCollide = false;
+	tiltPart.Name = "tiltPart";
+	tiltPart.Parent = player.Character;
+	
+	-- could adjust the maxVelocity
+	local tJoint = Instance.new("Motor6D");
+	tJoint.Name = "tiltJoint"
+	tJoint.MaxVelocity = math.pi*2*0.01;
+	tJoint.Part0 = player.Character.Head;
+	tJoint.Part1 = tiltPart;
+	tJoint.Parent = player.Character.Head;
+	
+	local neck = player.Character.Head.Neck;
+	local waist = player.Character.UpperTorso.Waist;
+	local rShoulder = player.Character.RightUpperArm.RightShoulder;
+	local lShoulder = player.Character.LeftUpperArm.LeftShoulder;
+	
+	-- the updating happens on the server
+	game:GetService("RunService").Heartbeat:Connect(function(dt)
+		local theta = tJoint.CurrentAngle
+		neck.C0 = neckC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
+		waist.C0 = waistC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
+		rShoulder.C0 = rShoulderC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
+		lShoulder.C0 = lShoulderC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
+	end)
+end)
+
+-- client (instead of firing in the onUpdate function we just put this at the end)
+while (true) do
+	wait(0.1);
+	remoteEvents.tiltAt:FireServer(math.asin(camera.CFrame.LookVector.y));
+end
+```
+
+The other is `BodyPosition`. We can set `BodyPosition.Position = Vector3.new(theta, 0, 0)` and then use the `Position` of the part it's a child of to find the interpolated angle.
+
+```
+remoteEvents.tiltAt.OnServerEvent:Connect(function(player, theta)	
+	local tPart = player.Character:FindFirstChild("tiltPart");
+	if (tPart) then
+		tPart.BodyPosition.Position = Vector3.new(theta, 0, 0);
+	end
+end)
+
+remoteEvents.setup.OnServerEvent:Connect(function(player, weapon)
+	-- stuff from before...
+	local tiltPart = Instance.new("Part");
+	tiltPart.Size = Vector3.new(.1, .1, .1);
+	tiltPart.Transparency = 1;
+	tiltPart.CanCollide = false;
+	tiltPart.Name = "tiltPart";
+	tiltPart.Parent = player.Character;
+	
+	-- you could adjust the D, P, and maxForce values
+	local bodyPos = Instance.new("BodyPosition");
+	bodyPos.Parent = tiltPart;
+	
+	local neck = player.Character.Head.Neck;
+	local waist = player.Character.UpperTorso.Waist;
+	local rShoulder = player.Character.RightUpperArm.RightShoulder;
+	local lShoulder = player.Character.LeftUpperArm.LeftShoulder;
+	
+	-- the updating happens on the server
+	game:GetService("RunService").Heartbeat:Connect(function(dt)
+		local theta = tiltPart.Position.x;
+		neck.C0 = neckC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
+		waist.C0 = waistC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
+		rShoulder.C0 = rShoulderC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
+		lShoulder.C0 = lShoulderC0 * CFrame.fromEulerAnglesYXZ(theta*0.5, 0, 0);
+	end)
+end)
+
+-- client (again, instead of firing in the onUpdate function we just put this at the end)
+while (true) do
+	wait(0.1);
+	remoteEvents.tiltAt:FireServer(math.asin(camera.CFrame.LookVector.y));
+end
+```
+![gif6](imgs/simpleFPS/gif6.gif)
+
+Personally I like the `BodyPosition` method a bit more because it provides a smoother interpolation. I have updated the place file with this method for you convenience.
 
 ## Conclusion
 
