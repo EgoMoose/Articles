@@ -347,7 +347,7 @@ end
 
 The other is `BodyPosition`. We can set `BodyPosition.Position = Vector3.new(theta, 0, 0)` and then use the `Position` of the part it's a child of to find the interpolated angle.
 
-```
+```Lua
 remoteEvents.tiltAt.OnServerEvent:Connect(function(player, theta)	
 	local tPart = player.Character:FindFirstChild("tiltPart");
 	if (tPart) then
