@@ -50,11 +50,11 @@ c.z = a.x*b.y - a.y*b.x
 
 a . c = a.x*a.y*b.z - a.x*a.z*b.y + a.y*a.z*b.x - a.y*a.x*b.z + a.z*a.x*b.y - a.z*a.y*b.x
       = (a.x*a.y*b.z - a.y*a.x*b.z) + (a.y*a.z*b.x - a.z*a.y*b.x) + (a.z*a.x*b.y - a.x*a.z*b.y)
-	  = 0
+      = 0
 
 b . c = b.x*a.y*b.z - b.x*a.z*b.y + b.y*a.z*b.x - b.y*a.x*b.z + b.z*a.x*b.y - b.z*a.y*b.x
       = (b.x*a.y*b.z - b.z*a.y*b.x) + (b.y*a.z*b.x - b.x*a.z*b.y) + (b.z*a.x*b.y - b.y*a.x*b.z)
-	  = 0
+      = 0
 ```
 
 ## Magnitude of the cross product
