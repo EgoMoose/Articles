@@ -1,6 +1,6 @@
 # The cross product
 
-The cross product, sometimes called the vector product, is an operation preformed on two three-dimensional vectors which returns a third vector that is perpendicular to the other two. Mathematically the cross product is written as two vectors seperated by an `x`.
+The cross product, sometimes called the vector product, is an operation preformed on two three-dimensional vectors which returns a third vector that is perpendicular to the other two. Mathematically the cross product is written as two vectors separated by an `x`.
 
 ![img1](imgs/cross/img1.png)
 
@@ -15,7 +15,7 @@ By using what is called the right hand rule it is possible to figure which of th
 3. Aim your fingers (not your thumb) to be pointing in the direction of the first vector.
 4. Twist your wrist such that you can curl your fingers inwards towards the second vector.
 
-If you can successfully curl your fingers then your thumb will represent the resulting direction.
+If you can successfully curl your fingers, then your thumb will represent the resulting direction.
 
 This concept can be hard to grasp without any visuals. As such it's recommended that you check out this video to get a better visualization.
 
@@ -39,7 +39,7 @@ From this formula you can note that if `a` and `b` are parallel then the cross p
 
 ## Perpendicular proof
 
-To prove that the cross product is in fact perpendicular to both input vectors we can use the [dot product](https://github.com/EgoMoose/Articles/blob/master/Vectors/Dot%20product.md) which states that the the magnitude of `a` dot `b` is equal to `|a||b|cosθ`. Thus if the resulting cross product vector is perpendicular to both inputs (90 degrees) the dot product should be zero.
+To prove that the cross product is in fact perpendicular to both input vectors we can use the [dot product](https://github.com/EgoMoose/Articles/blob/master/Vectors/Dot%20product.md) which states that the the magnitude of `a` dot `b` is equal to `|a||b|cosθ`. Thus, if the resulting cross product vector is perpendicular to both inputs (90 degrees) the dot product should be zero.
 
 ```
 c = a x b
@@ -65,9 +65,9 @@ The magnitude of the cross product represents the area of the parallelogram that
 
 This means the magnitude of the cross product is equivalent to `|a x b| = |a||b||sinθ|`.
 
-One thing to take note of is that unlike the dot product's magnitude the trigonomic aspect is an absolute value. This means we cannot as easily rearrange to solve for theta since `|sinθ| = |sin(θ + π)|` thus providing the potential to get the wrong angle.
+One thing to take note of is that unlike the dot product's magnitude the trig function aspect is an absolute value. This means we cannot as easily rearrange to solve for theta since `|sinθ| = |sin(θ + π)|` thus providing the potential to get the wrong angle.
 
-The proof for the magnitude is quite messy, but can be found below if interested.
+The proof for the magnitude is quite messy but can be found below if interested.
 
 ```
 |a x b|^2 = (a.y*b.z - a.z*b.y)^2 + (a.z*b.x - a.x*b.z)^2 + (a.x*b.y - a.y*b.x)^2
@@ -81,7 +81,7 @@ The proof for the magnitude is quite messy, but can be found below if interested
 |a x b|^2 = |a|^2*|b|^2 - |a|^2*|b|*cos^2(θ)
 |a x b|^2 = |a|^2*|b|^2*(1 - cos^2(θ))
 |a x b|^2 = |a|^2*|b|^2*sin^2(θ)
-|a x b| = |a|*|b|*|sinθ| -> abosolute value of sinθ since a sqrt inner value can't be negative
+|a x b| = |a|*|b|*|sinθ| -> absolute value of sinθ since a sqrt inner value can't be negative
 ```
 
 ## Example of the cross product: Rotated placement
