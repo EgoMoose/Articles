@@ -2,7 +2,7 @@
 
 The cross product, sometimes called the vector product, is an operation preformed on two three-dimensional vectors which returns a third vector that is perpendicular to the other two. Mathematically the cross product is written as two vectors seperated by an `x`.
 
-![img1]((imgs/cross/img1.png))
+![img1](imgs/cross/img1.png)
 
 We can note from the above image that the order of the cross product matters since it flips the resulting vector. So how do we know which order faces which way?
 
@@ -61,7 +61,7 @@ b . c = b.x*a.y*b.z - b.x*a.z*b.y + b.y*a.z*b.x - b.y*a.x*b.z + b.z*a.x*b.y - b.
 
 The magnitude of the cross product represents the area of the parallelogram that is created by the two input vectors.
 
-![img2]((imgs/cross/img2.png))
+![img2](imgs/cross/img2.png)
 
 This means the magnitude of the cross product is equivalent to `|a x b| = |a||b||sinθ|`.
 
