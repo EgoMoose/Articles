@@ -273,7 +273,7 @@ In one case the shortest path requires a clockwise rotation and in the other cas
 
 ![gif1](imgs/technical/gif1.gif)
 
-It's worth noting that typically when we SLERP we choose the quaternion twin that's closest to our intital rotation. This is pretty easy to do if we treat the quaternions as vectors and check the dot product. The geometric definition of the dot product is `a.b = |a||b|cosθ` thus since quaternions are on the surface of a unit sphere both their magnitudes will be `1` leaving only `cosθ`. If both quaternions are on the same half of the sphere the angle between them will be less than 180 degrees and thus `cosθ` will be positive and vice versa if the quaternion is on the other side of the sphere. Thus we compare the dot product between the starting quaternion and both twins and pick the twin with the positive dot product.
+It's worth noting that typically when we SLERP we choose the quaternion twin that's closest to our intital rotation. This is pretty easy to do if we treat the quaternions as vectors and check the dot product. The geometric definition of the dot product is `a.b = |a||b|cosθ` thus since quaternions are on the surface of a unit sphere both their magnitudes will be `1` leaving only `cosθ`. If both quaternions are on the same half of the sphere the angle between them will be less than 90 degrees and thus `cosθ` will be positive and vice versa if the quaternion is on the other side of the sphere. Thus we compare the dot product between the starting quaternion and both twins and pick the twin with the positive dot product.
 
 ![img18](imgs/technical/img18.png)
 
