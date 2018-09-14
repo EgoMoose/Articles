@@ -39,7 +39,7 @@ One of the neat things we can do with this equation is find the initial velocity
 
 ![eq5](imgs/projectileMotion/eq5.png)
 
-![gif1](imgs/projectileMotion/gif1.png)
+![gif1](imgs/projectileMotion/gif1.gif)
 
 ```Lua
 local t = 1;
@@ -99,7 +99,7 @@ For those of you who are unaware the property [Humanoid.JumpPower](https://www.r
 
 To find the jump height we need again to draw on some basic calculus intuition. We know that the derivative of a function allows us to calculate the slope at any given point. Looking at an example position function we can see that since it’s a parabola, its maximum height coincides with a slope of zero.
 
-![gif2](imgs/projectileMotion/gif2.png)
+![gif2](imgs/projectileMotion/gif2.gif)
 
 We already know the derivative of the position function is `v(t)` so if we set it equal to zero and solve for `t` then we know the time value when the position function has reached its maximum height.
 
@@ -175,7 +175,7 @@ As such the last step is going to be to calculate these world CFrame values such
 
 As such our final code is:
 
-![gif3](imgs/projectileMotion/gif3.png) 
+![gif3](imgs/projectileMotion/gif3.gif) 
 
 ```Lua
 local attach0 = Instance.new("Attachment", game.Workspace.Terrain);
