@@ -6,7 +6,7 @@ On occasion you may find it necessary to draw triangles given three points in 3D
 
 * [Triangle decomposition](#triangle-decomposition)
 * [Manipulating the rotation matrix](#manipulating-the-rotation-matrix)
-* [Putting it all together](#putting-it-all-together)
+* [Optimization](#optimization)
 
 ## Triangle decomposition
 
@@ -114,8 +114,6 @@ local function draw3dTriangle(a, b, c, parent)
 end
 ```
 
-## Putting it all together
-
 When you put everything together you have a way to position and properly size two wedges to fit into any triangle!
 
 ![img6](imgs/img6.gif)
@@ -179,3 +177,93 @@ local function draw3dTriangle(a, b, c, parent)
 	wedge2.Parent = parent;
 end
 ```
+
+## Optimization
+
+The above code is fine, but there's a lot we can do to make our triangle calculation much more efficient. We will mainly do this by removing any trig functions we can.
+
+So starting a new function the first thing we want to do is adjust our points such that point `a` is the point that is not connected to the longest edge.
+
+![img7](imgs/img7.png)
+
+```Lua
+local function draw3dTriangle(a, b, c, parent, w1, w2)
+	local ab, ac, bc = b - a, c - a, c - b;
+	local abd, acd, bcd = ab:Dot(ab), ac:Dot(ac), bc:Dot(bc);
+	
+	if (abd > acd and abd > bcd) then
+		c, a = a, c;
+	elseif (acd > bcd and acd > abd) then
+		a, b = b, a;
+	end
+	
+	ab, ac, bc = b - a, c - a, c - b;
+end
+```
+
+Now we are certain the longest edge is `bc` and the two shorter edges are `ab` and `ac`. We can use this information to find the right, up, and back vectors again.
+
+```Lua
+local function draw3dTriangle(a, b, c, parent, w1, w2)
+	-- code from before...
+	local right = ac:Cross(ab).unit;
+	local up = bc:Cross(right).unit;
+	local back = bc.unit;
+end
+```
+
+Once again using the fact that geometric definition of the dot product is `a.b = |a||b|cosθ` we can do some vector projections and find the width and height of each triangle.
+
+```Lua
+local function draw3dTriangle(a, b, c, parent, w1, w2)
+	-- code from before...
+	local height = math.abs(ab:Dot(up));
+	
+	w1 = w1 or wedge:Clone();
+	w1.Size = Vector3.new(0, height, math.abs(ab:Dot(back)));
+	
+	w2 = w2 or wedge:Clone();
+	w2.Size = Vector3.new(0, height, math.abs(ac:Dot(back)));
+end
+```
+
+Finally, we can create the CFrame by using the three directional vectors from earlier and the mid point of the two short edges. We could put each component in manually like before, but alternatively we can use the constructor `CFrame.fromMatrix` which will take the vectors and do it for us. So putting everything together we get our final optimized function.
+
+```Lua
+local wedge = Instance.new("WedgePart");
+wedge.Anchored = true;
+wedge.TopSurface = Enum.SurfaceType.Smooth;
+wedge.BottomSurface = Enum.SurfaceType.Smooth;
+
+local function draw3dTriangle(a, b, c, parent, w1, w2)
+	local ab, ac, bc = b - a, c - a, c - b;
+	local abd, acd, bcd = ab:Dot(ab), ac:Dot(ac), bc:Dot(bc);
+	
+	if (abd > acd and abd > bcd) then
+		c, a = a, c;
+	elseif (acd > bcd and acd > abd) then
+		a, b = b, a;
+	end
+	
+	ab, ac, bc = b - a, c - a, c - b;
+	
+	local right = ac:Cross(ab).unit;
+	local up = bc:Cross(right).unit;
+	local back = bc.unit;
+	
+	local height = math.abs(ab:Dot(up));
+	
+	w1 = w1 or wedge:Clone();
+	w1.Size = Vector3.new(0, height, math.abs(ab:Dot(back)));
+	w1.CFrame = CFrame.fromMatrix((a + b)/2, right, up, back);
+	w1.Parent = parent;
+	
+	w2 = w2 or edge:Clone();
+	w2.Size = Vector3.new(0, height, math.abs(ac:Dot(back)));
+	w2.CFrame = CFrame.fromMatrix((a + c)/2, -right, up, -back);
+	w2.Parent = parent;
+	
+	return w1, w2;
+end
+```
+
