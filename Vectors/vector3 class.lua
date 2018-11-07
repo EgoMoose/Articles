@@ -161,9 +161,9 @@ end
 function vector3:cross(b)
 	local a, b = ref[self], ref[b];
 	return vector3.new(
-        a.y * b.z - a.z * b.y,
-        a.z * b.x - a.x * b.z,
-        a.x * b.y - a.y * b.x
+		a.y * b.z - a.z * b.y,
+		a.z * b.x - a.x * b.z,
+		a.x * b.y - a.y * b.x
     );
 end
 
