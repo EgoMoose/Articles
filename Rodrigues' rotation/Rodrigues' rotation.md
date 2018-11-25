@@ -21,7 +21,7 @@ To start off let's look at what a Rodrigues' rotation actually looks like.
 
 ![img1](imgs/img1.gif)
 
-By drawing a few extra parts we can see the formula is rotating the red vector around the blue vector much like the axel of a car.
+By drawing a few extra parts we can see the formula is rotating the red vector around the blue vector much like the axle of a car.
 
 ![img2](imgs/img2.gif)
 
