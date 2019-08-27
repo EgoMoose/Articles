@@ -234,3 +234,91 @@ game:GetService("RunService").RenderStepped:Connect(function(dt)
 	attach1.CFrame = attach1.Parent.CFrame:inverse() * cf2;
 end)
 ```
+
+## Edit
+
+So recently [@CloneTrooper1019](https://twitter.com/CloneTeee1019) posted [this](https://twitter.com/CloneTeee1019/status/1139272882998128640) on twitter and through a series of events I was asked if I would post a tutorial showing how to do it. I'm not sure if this is exactly how Clone did it, but this is how I approached it.
+
+So to start off let's cover the process that doing something like this would entail.
+
+1. Start with a position and velocity which we can use the above equations to find the projectile's path.
+2. Find where this path intersects with in game geometry.
+3. Reflect the current velocity against the geometry's surface.
+4. Use the intersection position and reflected velocity to repeat from step 1 as many times as desired.
+
+We already know how to do steps 1 and 4 from the above post so all we need to cover are steps 2 and 3.
+
+To find where our projectile intersects with a surface we'll do two things. 
+
+We'll first split our projectile's path into multiple rays which can then be used to find an intersection with in game geometry. 
+
+```Lua
+local g = Vector3.new(0, game.Workspace.Gravity, 0)
+
+local function x(t, v0, x0)
+	return 0.5*g*t*t + v0*t + x0
+end
+
+local function intersection(x0, v0)
+	local t = 0
+	local hit, pos, normal
+	
+	repeat
+		local p0 = x(t, v0, x0)
+		local p1 = x(t + 0.1, v0, x0)
+		t = t + 0.1
+		
+		local ray = Ray.new(p0, p1 - p0)
+		hit, pos, normal = game.Workspace:FindPartOnRay(ray)
+	until (hit or t > 5)
+	
+	-- so our plane is defined by the pos and normal variables
+end
+```
+
+This will provide two key pieces of information; an estimated intersection position and a surface normal. We'll then use those pieces of information to do a plane-quadratic intersection which will give us an exact intersection value.
+
+Using a general form of the quadratic formula:
+
+![eq1](imgs/projectileMotion/edit_1_1.png) 
+
+We know the quadratic will intersect with a plane defined by `P` and `N` when:
+
+![eq2](imgs/projectileMotion/edit_1_2.png) 
+
+This gives us two situations where we solve for t differently.
+
+The first being when `a . N ≠ 0` in which case we use the quadratic formula.
+
+![eq3](imgs/projectileMotion/edit_1_3.png) 
+
+The second being when `a . N = 0` in which case we simple solve the linear equation for t:
+
+![eq4](imgs/projectileMotion/edit_1_4.png) 
+
+In code this translates to:
+
+```Lua
+local function planeQuadraticIntersection(v0, x0, p, n)
+	local a = (0.5*g):Dot(n)
+	local b = v0:Dot(n)
+	local c = (x0 - p):Dot(n)
+	
+	if (a ~= 0) then
+		local d = math.sqrt(b*b - 4*a*c)
+		return (-b - d)/(2*a)
+	else
+		return -c / b
+	end
+end
+```
+
+All that's left is to solve step 3 which is to reflect our velocity vector against the surface normal. This is simple enough and is currently explained on the [dot product](https://developer.roblox.com/articles/Calculating-Dot-Products) devhub wiki page. The only thing you might do here is slightly damp the velocity such that your reflection loses some energy as it bounces.
+
+When you put all that together you get:
+
+![edit_gif](imgs/projectileMotion/edit_1_5.gif)
+
+It's not perfect mainly because how velocity is damped, but it's a pretty good projection of the path traveled. Enjoy!
+
+[Trajectory.rbxl](other/projectileMotion/Trajectory.rbxl) 
