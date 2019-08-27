@@ -115,6 +115,8 @@ Again using the knowledge that `kx^2 + ky^2 + kz^2 = 1` we can simplify which le
 
 ![eq16](imgs/eq16.png)
 
+This rotation matrix is equivalent to the `CFrame.fromAxisAngle` constructor.
+
 ```Lua
 local function rodriguesMatrix(k, t)
 	-- we will use CFrame for this
