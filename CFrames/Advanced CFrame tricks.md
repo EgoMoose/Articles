@@ -477,3 +477,31 @@ print(CFrame.fromEulerAnglesXXY(math.pi, -math.pi, math.pi/2))
 ```
 
 Again, hope that helps! Enjoy!
+
+## Edit 3
+
+Another quick thing I should mention about swing twist:
+
+In the OP I talked about solving for `q = qs * qt`, so swing then twist. However, if you tried to solve for `q = qt * qs` you'd get the exact same results we got above. Surely this doesn't make sense? That would imply that `q = qs * qt = qt * qs`, right?
+
+Well, no... What you'd be forgetting to take into account is that due to `qt` being pre-multiplied our input direction vector must be object space relative to the axis-aligned identity CFrame whereas before it was object space to the end result CFrame.
+
+```Lua
+-- where cfB is the end result CFrame
+-- swing twist our direction vector is object space to the end CFrame
+local swing, twist = swingTwist(cfB, cfB:VectorToObjectSpace(line.CFrame.UpVector))
+
+-- twist swing our direction vector is object space to CFrame.new()
+local function twistSwing(cf, direction)
+	local axis, theta = cf:ToAxisAngle()
+	local w, v = math.cos(theta/2),  math.sin(theta/2)*axis
+	local proj = v:Dot(direction)*direction
+	local twist = CFrame.new(cf.x, cf.y, cf.z, proj.x, proj.y, proj.z, w)
+	local swing = twist:Inverse() * cf
+	return swing, twist
+end
+
+local swing, twist = twistSwing(cfB, line.CFrame.UpVector)
+``` 
+
+![2019-08-27_20-28-19](imgs/advancedTricks/gif10.gif)
