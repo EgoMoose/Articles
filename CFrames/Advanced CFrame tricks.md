@@ -156,7 +156,7 @@ Well there's a couple approaches we can come at this from. We can use our functi
 local function swingTwist(cf, direction)
 	local swing = CFrame.new()
 	local rDirection = cf:VectorToWorldSpace(direction)
-    if (rDirection:Dot(direction) > -0.99999) then
+	if (rDirection:Dot(direction) > -0.99999) then
         -- we don't need to provide a backup axis b/c it will nvr be used
 		swing = getRotationBetween(direction, rDirection, nil)
 	end
@@ -194,7 +194,7 @@ vs:Cross(vt) . d = 0 -- vt and d are in same direction thus the cross and d must
 Now if we use the quaternion rules of multiplication and simplify what we can with the above:
 
 ```Lua
-q = qs * qt = [ws*wt - vt.vs, ws*vt + wt*vs + vs:Cross(vt)]
+q = qs * qt = [ws*wt - vt.vs, ws*vt + wt*vs + (vs x vt)]
             = [ws*wt, ws*vt + wt*vs + vs:Cross(vt)]
 
 Thus,
@@ -202,52 +202,53 @@ w = ws*wt
 v = ws*vt + wt*vs + vs:Cross(vt)
 ```
 
-Now if we dot `v` with `d` we get:
+Now if we project q onto the unit twist axis we get a new quaternion which we'll call `qp`
 
-```Lua
-v . d = (ws*vt + wt*vs + vs:Cross(vt)) . d
-      = ws*(vt . d) + wt*(vs . d) + (vs:Cross(vt)) . d)
-      = ws*(vt . d)
+```
+qp = q projected onto d
+
+qp = [w, (v.d)*d]
+   = [w, (ws*(vt . d) + wt*(vs . d) + vs:Cross(vt) . d)*d]
+   = [w, ws*|vt|*d]
+   = [w, ws*vt]
+   = [ws*wt, ws*vt]
 ```
 
-Now if we divide w by `v . d` plus `w` we get:
+Now if we normalize `qp` we'll see:
 
-```Lua
-w / (w + (v . d)) = ws*wt / (ws*wt + ws*(vt . d))
-                  = wt / (wt + (vt . d))
-                  = wt / (wt + |vt|)
+```
+qp / |qp| = [ws*wt, ws*vt] / sqrt(ws^2*wt^2 + ws^2*|vt|^2)
+          = ws*[wt, vt] / ws*sqrt(wt^2 + |vt|^2)
 ```
 
-It might seem like we're stuck here, but recall unit quaternions (which is what qt and qs are) have magnitudes of 1. Thus, `wt + |vt| = 1`. As a result then it must be that:
+We know that `sqrt(wt^2 + |vt|^2) = 1` because the twist quaternion is a unit quaternion by definition so therefore:
 
-```Lua
-wt = w / (w + (v . d))
+```
+qp / |qp| = [wt, vt]
 ```
 
-From here finding the rest of `qt` is easy given you know how quaternions work. 
+Now that we have `qt` solving `qs` is very easy we simply rearrange the original `q = qs * qt` equation with inverses to solve for `qs`
 
-```Lua
-ws = w / wt = w / (w / (w + (v . d))) = w + (v . d)
-(v . d)*d / ws = (ws*(vt . d)*d) /  ws = (vt . d)*d = vt
-
-vt = (v . d)*d / w + (v . d)
+```
+q = qs * qt
+q * qt:Inverse() = qs
 ```
 
-We could go through that math, but it's much faster to simply plug into the CFrame quaternion constructor which will do most of the work for us.
+As for code you might thing we have to normalize `qp` but since the CFrame constructor does that for us already so we can just plug in the values unchanged.
 
 ```Lua
 local function swingTwist(cf, direction)
-    local axis, theta = cf:ToAxisAngle()
-    -- convert to quaternion
-    local w, v = math.cos(theta/2),  math.sin(theta/2)*axis
+	local axis, theta = cf:ToAxisAngle()
+	-- convert to quaternion
+	local w, v = math.cos(theta/2),  math.sin(theta/2)*axis
 
-    -- (v . d)*d, plug into CFrame quaternion constructor with w it will solve rest for us
+	-- plug qp into the constructor and it will be normalized automatically
 	local proj = v:Dot(direction)*direction
-    local twist = CFrame.new(0, 0, 0, proj.x, proj.y, proj.z, w)
-    
-    -- cf = swing * twist, thus...
+	local twist = CFrame.new(0, 0, 0, proj.x, proj.y, proj.z, w)
+
+	-- cf = swing * twist, thus...
 	local swing = cf * twist:Inverse()
-	
+
 	return swing, twist
 end
 ```
