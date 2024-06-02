@@ -1,6 +1,6 @@
 # 3D Triangles
 
-On occasion you may find it necessary to draw triangles given three points in 3D space. This article aims to go over one method that can be used to create those triangles using knowledge of trigonometry and coordinate frames.
+On occasion, you may find it necessary to draw triangles with three given points in 3D space. This article aims to go over one method that can be used to create those triangles using knowledge of trigonometry and coordinate frames.
 
 ## Table of contents
 
@@ -14,7 +14,7 @@ The first thing we need to be aware of is that Roblox does not have a singular d
 
 ![img1](imgs/img1.png)
 
-Now that we understand the basics of our goal we have to ask ourselves how we can achieve this mathematically. We'll start this process off by finding some information about the triangle depending on what side is the longest.
+Now that we understand the basics of our goal, we have to ask ourselves how this can be achieved mathematically. We'll start this process off by finding some information about the triangle, depending on which side is the longest.
 
 ![img2](imgs/img2.png)
 
@@ -35,7 +35,7 @@ local function draw3dTriangle(a, b, c, parent)
 end
 ```
 
-Now that we have that information we can solve for one of the interior angles using the dot product between the two vectors we singled out. Having this angles allows us to use the basics of trigonometry to solve for our width and height for both of the triangles.
+Now that we have that information, we can solve one of the interior angles using the dot product between the two vectors we singled out. Having these angles allows us to use the basics of trigonometry to solve for our width and height for both of the triangles.
 
 ![img3](imgs/img3.png)
 
@@ -50,11 +50,11 @@ local function draw3dTriangle(a, b, c, parent)
 end
 ```
 
-Beautiful! We now have the sizes of our two right triangles. Now we have to answer how we can properly position and rotate two wedges so they represent the larger triangle they are apart of.
+Beautiful! We now have the sizes of our two right triangles. Now we have to answer how we can properly position and rotate two wedges so they represent the larger triangle they are part of.
 
 ## Manipulating the rotation matrix
 
-Rarely when using CFrames do we find ourselves in a situation where we manually enter rotation components. This is one of those situations! We know a CFrame's rotation matrix represents the right, up, and back facing directions in any given rotation. If we can find out what those vectors are for each wedge we can plug them in to create a CFrame!
+When using CFrames, rarely do we find ourselves in a situation where we manually enter rotation components. This is one of those situations! We know a CFrame's rotation matrix represents the right, up, and back-facing directions in any given rotation. If we can find out what those vectors are for each wedge, we can plug them in to create a CFrame!
 
 ```Lua
 local cf = CFrame.new() * CFrame.Angles(math.pi/4, math.pi/3, 0);
@@ -68,7 +68,7 @@ local back = Vector3.new(r13, r23, r33); -- back facing direction
 print(cf.lookVector, -back); -- lookVector's the front facing direction so -back == cf.lookVector
 ```
 
-However, before we even talk about how we’re going to get the right, up, and back vectors let’s first talk about how we’re going to get the position which is pretty straightforward with some simple vector math. Even though a wedge isn’t a rectangle it’s still positioned as such. That means the position we want for each wedge is the mid-way point across each right triangle’s hypotenuse. 
+However, before we even talk about how we’re going to get the right, up, and back vectors, let’s first talk about how we’re going to get the position, which is pretty straightforward with some simple vector math. Even though a wedge isn’t a rectangle, it’s still positioned as such. That means the position we want for each wedge is the mid-way point across each right triangle’s hypotenuse.
 
 ![img4](imgs/img4.png)
 
@@ -80,7 +80,7 @@ local function draw3dTriangle(a, b, c, parent)
 end
 ```
 
-Now that we have both positions we can focus entirely on getting the facing directions for the rotation matrix. We can get the `right` vector of the rotation matrix by crossing the `longest` vector with the `other` vector and then normalizing. Once we have the `right` vector we can cross it with the `longest` vector and normalize again to get the `up` vector. Finally the `back` vector is simply just the longest vector normalized.
+Now that we have both positions, we can focus entirely on getting the facing directions for the rotation matrix. We can get the `right` vector of the rotation matrix by crossing the `longest` vector with the `other` vector and then normalizing. Once we have the `right` vector, we can cross it with the `longest` vector and normalize again to get the `up` vector. Finally, the `back` vector is simply just the longest vector normalized.
 
 ![img5](imgs/img5.png)
 
@@ -93,7 +93,7 @@ local function draw3dTriangle(a, b, c, parent)
 end
 ```
 
-Finally, we just have to plug these direction into the two wedge’s CFrames remembering to take into account that because their hypotenuses are sloping away from each other some of the rotational vectors are flipped.
+Finally, we just have to plug these directions into the two wedges’s CFrames, remembering to take into account that because their hypotenuses are sloping away from each other, some of the rotational vectors are flipped.
 
 ```Lua
 local function draw3dTriangle(a, b, c, parent)
@@ -114,7 +114,7 @@ local function draw3dTriangle(a, b, c, parent)
 end
 ```
 
-When you put everything together you have a way to position and properly size two wedges to fit into any triangle!
+When you put everything together, you have a way to position and properly size two wedges to fit into any triangle!
 
 ![img6](imgs/img6.gif)
 
@@ -180,9 +180,9 @@ end
 
 ## Optimization
 
-The above code is fine, but there's a lot we can do to make our triangle calculation much more efficient. We will mainly do this by removing any trig functions we can.
+The above code is fine, but there's a lot we can do to make our triangle calculation much more efficient. We will mainly do this by removing any trigonometric functions we can.
 
-So starting a new function the first thing we want to do is adjust our points such that point `a` is the point that is not connected to the longest edge.
+So when starting a new function, the first thing we want to do is adjust our points so that point a is the point that is not connected to the longest edge.
 
 ![img7](imgs/img7.png)
 
@@ -212,7 +212,7 @@ local function draw3dTriangle(a, b, c, parent, w1, w2)
 end
 ```
 
-Once again using the fact that geometric definition of the dot product is `a.b = |a||b|cosθ` we can do some vector projections and find the width and height of each triangle.
+Once again, using the fact that the geometric definition of the dot product is `a.b = |a||b|cosθ` we can do some vector projections and find the width and height of each triangle.
 
 ```Lua
 local function draw3dTriangle(a, b, c, parent, w1, w2)
@@ -227,7 +227,9 @@ local function draw3dTriangle(a, b, c, parent, w1, w2)
 end
 ```
 
-Finally, we can create the CFrame by using the three directional vectors from earlier and the mid point of the two short edges. We could put each component in manually like before, but alternatively we can use the constructor `CFrame.fromMatrix` which will take the vectors and do it for us. So putting everything together we get our final optimized function.
+Finally, we can create the CFrame by using the three directional vectors from earlier and the mid point of the two short edges. We could put each component in manually like before, but alternatively we can use the constructor `CFrame.fromMatrix` which will take the vectors and do it for us.
+
+Putting everything together, we get our final optimized function:
 
 ```Lua
 local wedge = Instance.new("WedgePart");
